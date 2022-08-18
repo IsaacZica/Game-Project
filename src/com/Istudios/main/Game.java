@@ -25,7 +25,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     private final BufferedImage image;
 
     public List<Entity> entities;
-    public Spritesheet spritesheet;
+    public static Spritesheet spritesheet;
     public Player player;
 
 
@@ -87,7 +87,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(0, 0, 0));
+        g.setColor(new Color(0, 255, 0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
         /*render jogo*/
 
