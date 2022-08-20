@@ -1,9 +1,18 @@
 package com.Istudios.entities;
 
+import com.Istudios.main.Game;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+
+    public static BufferedImage HEALTHRESTORE_EN = Game.spritesheet.getSprite(96, 0, 16, 16);
+    public static BufferedImage MANARESTORE_EN = Game.spritesheet.getSprite(96, 16, 16, 16);
+    public static BufferedImage SIMPLEENEMY_EN = Game.spritesheet.getSprite(112, 16, 16, 16);
+    public static BufferedImage WAND_EN = Game.spritesheet.getSprite(112, 0, 16, 16);
+
+
     protected double x;
     protected double y;
     protected int width;

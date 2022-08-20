@@ -3,6 +3,7 @@ package com.Istudios.main;
 import com.Istudios.entities.Entity;
 import com.Istudios.entities.Player;
 import com.Istudios.grafics.Spritesheet;
+import com.Istudios.world.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public List<Entity> entities;
     public static Spritesheet spritesheet;
     public Player player;
+    public static World world;
 
 
     public Game() {
@@ -39,7 +41,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
         entities.add(player);
-
+        world = new World("/map.png");
     }
 
     public static void main(String[] args) {
@@ -87,9 +89,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(0, 255, 0));
+        g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
         /*render jogo*/
+        world.render(g);
 
         for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
