@@ -3,36 +3,46 @@ package com.Istudios.main;
 import com.Istudios.entities.Entity;
 import com.Istudios.entities.Player;
 import com.Istudios.grafics.Spritesheet;
+import com.Istudios.util.KeyBoard;
+import com.Istudios.util.Mouse;
 import com.Istudios.world.World;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game extends Canvas implements Runnable, KeyListener {
+public class Game extends Canvas implements Runnable/*, KeyListener, MouseListener*/ {
 
+//    public static AffineTransformOp at = new AffineTransformOp();
     public boolean isRunning;
     private Thread thread;
     public static JFrame frame;
-    private final int WIDTH = 240;
-    private final int HEIGHT = 160;
-    private final int SCALE = 3;
+    public static final int WIDTH = 240;
+    public static final int HEIGHT = 160;
+    public static final int SCALE = 3;
 
     private final BufferedImage image;
 
-    public List<Entity> entities;
+    public static List<Entity> entities;
     public static Spritesheet spritesheet;
-    public Player player;
+    public static Player player;
     public static World world;
 
 
     public Game() {
-        addKeyListener(this);
+        Mouse mouse = new Mouse();
+        addKeyListener(new KeyBoard());
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
         this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         initFrame();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -125,7 +135,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
         stop();
     }
 
-    @Override
+    /*@Override
     public void keyTyped(KeyEvent e) {
 
     }
@@ -143,6 +153,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
             player.right = true;
         }
+
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            Game.player.speed += 1;
+        }
+
     }
 
     @Override
@@ -158,5 +173,42 @@ public class Game extends Canvas implements Runnable, KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
             player.right = false;
         }
+
+
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            Game.player.speed = player.SPEED_BASE;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            Game.player.isAttacking = true;
+        }
+
+
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("x"+e.getX());
+        System.out.println("lOnScr"+e.getY());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }*/
 }

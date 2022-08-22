@@ -18,4 +18,8 @@ public class Spritesheet {
     public BufferedImage getSprite(int x, int y, int width, int height) {
         return spritesheet.getSubimage(x, y, width, height);
     }
+
+    public BufferedImage getSpriteByBlock(int posX, int posY, int blockSize) {
+        return spritesheet.getSubimage(posX * blockSize, posY * blockSize, blockSize, blockSize);
+    }
 }
