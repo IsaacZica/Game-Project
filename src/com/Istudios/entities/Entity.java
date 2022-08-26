@@ -19,7 +19,16 @@ public class Entity {
     protected int width;
     protected int height;
 
-    private BufferedImage sprite;
+    private final BufferedImage sprite;
+
+
+    public Entity(int x, int y, int width, int height, BufferedImage sprite) {
+        setX(x);
+        setY(y);
+        this.width = width;
+        this.height = height;
+        this.sprite = sprite;
+    }
 
     public int getX() {
         return (int) x;
@@ -37,6 +46,13 @@ public class Entity {
         return height;
     }
 
+    public double getCenterX() {
+        return x + width / 2;
+    }
+
+    public double getCenterY() {
+        return y + height / 2;
+    }
 
     public void setX(int x) {
         this.x = x;
@@ -46,20 +62,16 @@ public class Entity {
         this.y = y;
     }
 
-    public Entity(int x, int y, int width, int height, BufferedImage sprite) {
-
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.sprite = sprite;
-    }
 
     public void tick() {
 
     }
 
+    public void drawSprite(BufferedImage sprite, int x, int y, Graphics g) {
+        g.drawImage(sprite, x - Camera.x, y - Camera.y, null);
+    }
+
     public void render(Graphics g) {
-        g.drawImage(sprite,(int) this.getX() - Camera.x,(int) this.getY() - Camera.y, null);
+        drawSprite(sprite,getX(),getY(),g);
     }
 }

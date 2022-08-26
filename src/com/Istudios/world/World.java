@@ -43,20 +43,22 @@ public class World {
 
                     if (pixel == 0xFFFFFFFF) {
 
+                        //walls
                         int[] colors = {0xFFFFFFFF, 0xFF4CFF00};
                         int s1 = 0, s2 = 0, s3 = 0, s4 = 0;
                         if (Arrays.stream(colors).anyMatch(c -> getColor(0, -1) == c)) s1 = 3;
                         if (Arrays.stream(colors).anyMatch(c -> getColor(-1, 0) == c)) s2 = 5;
                         if (Arrays.stream(colors).anyMatch(c -> getColor(0, 1) == c)) s3 = 7;
                         if (Arrays.stream(colors).anyMatch(c -> getColor(1, 0) == c)) s4 = 11;
-
-                        //cornertile
                         tiles[xx + (yy * WIDTH)] = new WallTile(tileOrientation(s1, s2, s3, s4), posX, posY);
 
                     } else if (pixel == 0xFFFF0000) {
 
                         //inimigo simples
-                        Game.entities.add(new FleshEnemy(posX, posY, tileWSize, tileHSize, Entity.SIMPLEENEMY_EN));
+
+                        Enemy enemy = new FleshEnemy(posX, posY, tileWSize, tileHSize, Entity.SIMPLEENEMY_EN);
+                        Game.entities.add(enemy);
+                        Game.enemies.add(enemy);
 
                     } else if (pixel == 0xFF00FFFF) {
 
@@ -130,7 +132,7 @@ public class World {
     private int getColor(int x, int y) {
         int sx = px + x;
         int sy = py + y;
-        if (sx > 0 && sx < HEIGHT - 1 && sy > 0 && sy < WIDTH - 1) {
+        if (sx > 0 && sx < WIDTH - 1 && sy > 0 && sy < HEIGHT - 1) {
 //            System.out.println("px: " + px  + " | py: " + py);
             return pixels[(px + x) + (py + y) * WIDTH];
         }

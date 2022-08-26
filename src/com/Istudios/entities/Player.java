@@ -7,6 +7,7 @@ import com.Istudios.world.World;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
@@ -19,19 +20,21 @@ public class Player extends Entity {
     public int dir = right_dir;
 
     private boolean isMoving = false;
-    public boolean isAttacking = false;
-    public boolean isContinuosAttack = false;
-    public int atcAngle;
 
-    private int frames = 0, maxFrames = 20,index = 0, maxIndex = 3;
-    private int atcFrames=0, atcMaxFrames = 3, atcIndex= 0, atcMaxIndex = 3;
+    public static Point point;
 
-    private BufferedImage[] rightPlayer;
-    private BufferedImage[] leftPlayer;
-    private BufferedImage[] upPlayer;
-    private BufferedImage[] downPlayer;
-    private BufferedImage[] downAttack;
-    private BufferedImage[] upAttack;
+    private int frames = 0;
+    private final int maxFrames = 20;
+    private int index = 0;
+    private final int maxIndex = 3;
+
+    private final BufferedImage[] rightPlayer;
+    private final  BufferedImage[] leftPlayer;
+    private final BufferedImage[] upPlayer;
+    private final  BufferedImage[] downPlayer;
+    public Sword sword;
+
+
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -39,27 +42,27 @@ public class Player extends Entity {
         leftPlayer = new BufferedImage[4];
         upPlayer = new BufferedImage[4];
         downPlayer = new BufferedImage[4];
-        downAttack = new BufferedImage[4];
-        upAttack = new BufferedImage[4];
+        point = new Point(x, y);
+        sword = new Sword();
+        sword.player = this;
 
-        setSpriteSheet(downPlayer, 2, 0, 16, false);
-        setSpriteSheet(upPlayer, 2, 1, 16, false);
-        setSpriteSheet(rightPlayer, 2, 2, 16, false);
-        setSpriteSheet(leftPlayer, 2, 3, 16, false);
-        setSpriteSheet(downAttack, 1, 2, 32, false);
-        for (int i = 0; i < downAttack.length; i++) {
-            upAttack[i] = rotateImageByDegrees(downAttack[i], 180);
-        }
+        setSpriteSheet(downPlayer, 2, 0, 16);
+        setSpriteSheet(upPlayer, 2, 1, 16);
+        setSpriteSheet(rightPlayer, 2, 2, 16);
+        setSpriteSheet(leftPlayer, 2, 3, 16);
+
 
     }
 
-    public BufferedImage rotateImageByDegrees(BufferedImage img, double angle) {
+    public static BufferedImage rotateImageByDegrees(BufferedImage img, double angle) {
         double rads = Math.toRadians(angle);
         double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
         int w = img.getWidth();
         int h = img.getHeight();
         int newWidth = (int) Math.floor(w * cos + h * sin);
         int newHeight = (int) Math.floor(h * cos + w * sin);
+
+//        System.out.println(newWidth + " | " + newHeight);
 
         BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = rotated.createGraphics();
@@ -68,7 +71,7 @@ public class Player extends Entity {
 
         int x = w / 2;
         int y = h / 2;
-
+//        System.out.println(x + " | " + y);
         at.rotate(rads, x, y);
         g2d.setTransform(at);
         g2d.drawImage(img, 0, 0, null);
@@ -77,9 +80,19 @@ public class Player extends Entity {
         return rotated;
     }
 
-    private void setSpriteSheet(BufferedImage[] imgArray, int posX, int posY, int blockSize, boolean verticalDirection) {
+    public double getAngle(double x, double y) {
+        double angle = Math.toDegrees(Math.atan2(getMouseY() - y, getMouseX() - x));
+
+        if(angle < 0){
+            angle += 360;
+        }
+
+        return angle;
+    }
+
+    public static void setSpriteSheet(BufferedImage[] imgArray, int posX, int posY, int blockSize) {
         for (int i = 0; i < imgArray.length; i++) {
-            imgArray[i] = Game.spritesheet.getSpriteByBlock(posX + (verticalDirection ? 0 : i), posY + (verticalDirection ? i : 0), blockSize);
+            imgArray[i] = Game.spritesheet.getSpriteByBlock(posX + i, posY, blockSize);
         }
     }
 
@@ -117,47 +130,51 @@ public class Player extends Entity {
             }
         }
 
-        if (isAttacking) {
-            atcFrames++;
-            if (atcFrames == atcMaxFrames) {
-                atcFrames = 0;
-                atcIndex++;
-            }
-            if (atcIndex > atcMaxIndex) {
-                atcIndex = 0;
-                if (!isContinuosAttack) {
-                    isAttacking = false;
-                }
-            }
+        if (sword.isAttacking) {
+            sword.attackTick();
         }
-//        Mouse.x = MouseInfo.getPointerInfo().getLocation().getX();
-//        Mouse.y = MouseInfo.getPointerInfo().getLocation().getY();
+//        System.out.println("GetXOnScreen "+getXOnScreen());
+//        System.out.println("GetYOnScreen "+getYOnScreen());
 
-
-
-        Camera.x =(int) (Camera.clamp(this.getX() - (Game.WIDTH / 2)-1, 0, World.WIDTH*16 - Game.WIDTH) + Mouse.x/8);
-        Camera.y =(int) (Camera.clamp(this.getY() - (Game.HEIGHT / 2)-1, 0, World.HEIGHT*16  - Game.HEIGHT) + Mouse.y/8);
+        Camera.x = Camera.clamp((int) (getCenterX() - (Game.WIDTH / 2) - 1), 0, World.WIDTH * 16 - Game.WIDTH);
+        Camera.y = Camera.clamp((int) (getCenterY() - (Game.HEIGHT / 2) - 1), 0, World.HEIGHT * 16 - Game.HEIGHT);
 
     }
 
     public void render(Graphics g) {
         if (dir == right_dir) {
-            g.drawImage(rightPlayer[index], this.getX()- Camera.x, this.getY()- Camera.y, null);
+            drawSprite(rightPlayer[index], getX(), getY(), g);
         } else if (dir == left_dir) {
-            g.drawImage(leftPlayer[index], this.getX()- Camera.x, this.getY()- Camera.y, null);
+            drawSprite(leftPlayer[index], getX(), getY(), g);
         }
 
         if (dir == up_dir ) {
-            if (isAttacking) {
-                g.drawImage(upAttack[atcIndex], this.getX()-8 - Camera.x, this.getY() -32  - Camera.y, null);
-            }
-            g.drawImage(upPlayer[index], this.getX()- Camera.x, this.getY()- Camera.y, null);
+            drawSprite(upPlayer[index], getX(), getY(), g);
         } else if (dir == down_dir) {
-            if (isAttacking) {
-                g.drawImage(downAttack[atcIndex], this.getX()-8 - Camera.x, this.getY() +16  - Camera.y, null);
-            }
-            g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY()- Camera.y, null);
+            drawSprite(downPlayer[index], getX(), getY(), g);
         }
 
+        if (Sword.isAttacking) {
+            sword.attackRender(g);
+        }
+
+
+    }
+
+    public int getMouseX() {
+//        Mouse.x -= Game.player.getXOnScreen();
+        return (int) (Mouse.getX() + getCenterX() - getXOnScreen() );
+    }
+    public int getMouseY() {
+//        Mouse.y -= Game.player.getYOnScreen();
+        return (int) (Mouse.getY() + getCenterY() - getYOnScreen());
+    }
+
+    public int getXOnScreen() {
+        return (int) (getCenterX()-Camera.x) - (Game.WIDTH/2);
+    }
+    public int getYOnScreen() {
+        return (int) (getCenterY()-Camera.y) - (Game.HEIGHT/2);
     }
 }
+

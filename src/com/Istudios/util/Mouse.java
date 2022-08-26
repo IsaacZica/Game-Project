@@ -1,5 +1,7 @@
 package com.Istudios.util;
 
+import com.Istudios.entities.Player;
+import com.Istudios.entities.Sword;
 import com.Istudios.main.Game;
 
 import java.awt.*;
@@ -9,45 +11,59 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 
 public class Mouse extends MouseAdapter implements MouseMotionListener {
-    public static double x = 0;
-    public static double y = 0;
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private double screenH = screenSize.getHeight();
-    private double screenW = screenSize.getWidth();
-    int mx, my;
+    public static double x;
+    public static double y;
     public static boolean mouseDragged;
+    public static boolean isClicking;
+
+    private static double windowHcenter = Game.HEIGHT * Game.SCALE / 2;
+    private static double windowWcenter = Game.WIDTH * Game.SCALE / 2;
+
+    public Mouse() {
+        super();
+    }
+
+    public static double getX() {
+        return x;
+    }
+
+    public static void setX(double x) {
+        Mouse.x = x;
+    }
+
+    public static double getY() {
+        return y;
+    }
+
+    public static void setY(double y) {
+        Mouse.y = y;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        setMousePosition(e);
+        isClicking = true;
+    }
 
+    private static void setMousePosition(MouseEvent e) {
+        x = (e.getX() - windowWcenter );
+        y = (e.getY() - windowHcenter );
+        x *= (1/ (double) Game.SCALE);
+        y *= (1/(double) Game.SCALE);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-//        System.out.println(screenH + " | " + screenW);
-//        System.out.println("x: " + (e.getX() + screenW / 2));
-//        System.out.println("y: " + (e.getY() + screenH / 2));
 
-//        System.out.println("x"+e.getX());
-//        System.out.println("y"+e.getY());
-
-//        System.out.println("x centered ="+(e.getX() - Game.WIDTH*Game.SCALE/2));
-//        System.out.println("y centered ="+(e.getY() - Game.HEIGHT*Game.SCALE/2));
-
-        x = e.getX() - Game.WIDTH * Game.SCALE / 2;
-        y = e.getY() - Game.HEIGHT * Game.SCALE / 2;
+        setMousePosition(e);
 
 //        System.out.println("mx: " + mx + " | my: " + my);
 
         if (e.getButton() == MouseEvent.BUTTON1) {
 //            Game.player.atcAngle = (int) MouseInfo.getPointerInfo().getLocation().distance(Game.WIDTH / 2, Game.HEIGHT / 2, (e.getX()), e.getY());
-            Game.player.isAttacking = true;
-            Game.player.isContinuosAttack = true;
+            Game.player.sword.isAttacking = true;
+            Game.player.sword.isContinuosAttack = true;
         }
-    }
-
-    public Mouse() {
-        super();
     }
 
     @Override
@@ -58,16 +74,14 @@ public class Mouse extends MouseAdapter implements MouseMotionListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            Game.player.isContinuosAttack = false;
+            Sword.isContinuosAttack = false;
         }
+        isClicking = false;
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        /*x = e.getX();
-        y = e.getY();
-        System.out.println("x"+e.getX());
-        System.out.println("y"+e.getY());*/
+
     }
 
     @Override
@@ -77,9 +91,7 @@ public class Mouse extends MouseAdapter implements MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        x = e.getX() - Game.WIDTH * Game.SCALE / 2;
-        y = e.getY() - Game.HEIGHT * Game.SCALE / 2;
-
+        setMousePosition(e);
 
         mouseDragged = true;
 
@@ -88,10 +100,10 @@ public class Mouse extends MouseAdapter implements MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        x = e.getX() - Game.WIDTH * Game.SCALE / 2;
-        y = e.getY() - Game.HEIGHT * Game.SCALE / 2;
+        setMousePosition(e);
 
         mouseDragged = false;
         e.consume();
     }
+
 }

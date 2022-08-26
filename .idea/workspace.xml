@@ -4,25 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597035c1-7a46-4cfe-a596-83ed2a7a75a1" name="Changes" comment="rendered tiles">
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/entities/FleshEnemy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/entities/HealthRestore.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/entities/ManaRestore.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/entities/Wand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/util/Camera.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/util/KeyBoard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/util/Mouse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/world/BreakableWallTile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/world/ConnectionTile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/Istudios/world/CornerTile.java" afterDir="false" />
+    <list default="true" id="597035c1-7a46-4cfe-a596-83ed2a7a75a1" name="Changes" comment="More implementation">
+      <change afterPath="$PROJECT_DIR$/src/com/Istudios/entities/Enemy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/Istudios/entities/Sword.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res/map.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/map.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res/spritesheet.png" beforeDir="false" afterPath="$PROJECT_DIR$/res/spritesheet.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/Istudios/entities/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/entities/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Istudios/entities/FleshEnemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/entities/FleshEnemy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/Istudios/entities/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/entities/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/Istudios/grafics/Spritesheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/grafics/Spritesheet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/Istudios/main/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/main/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Istudios/util/KeyBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/util/KeyBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Istudios/util/Mouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/util/Mouse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/Istudios/world/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/world/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/Istudios/world/WallTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/world/WallTile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/Istudios/world/World.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/Istudios/world/World.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -110,7 +105,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661013139141</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="More implementation">
+      <created>1661133693278</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1661133693278</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -128,6 +130,7 @@
     <MESSAGE value="Created sprites, rendered player and added movement" />
     <MESSAGE value="Added better sprites" />
     <MESSAGE value="rendered tiles" />
-    <option name="LAST_COMMIT_MESSAGE" value="rendered tiles" />
+    <MESSAGE value="More implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="More implementation" />
   </component>
 </project>

@@ -1,7 +1,9 @@
 package com.Istudios.main;
 
+import com.Istudios.entities.Enemy;
 import com.Istudios.entities.Entity;
 import com.Istudios.entities.Player;
+import com.Istudios.entities.Sword;
 import com.Istudios.grafics.Spritesheet;
 import com.Istudios.util.KeyBoard;
 import com.Istudios.util.Mouse;
@@ -9,16 +11,11 @@ import com.Istudios.world.World;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable/*, KeyListener, MouseListener*/ {
 
@@ -33,23 +30,27 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
     private final BufferedImage image;
 
     public static List<Entity> entities;
+    public static List<Enemy> enemies;
     public static Spritesheet spritesheet;
     public static Player player;
     public static World world;
+    public static Random random;
 
 
     public Game() {
-        Mouse mouse = new Mouse();
-        addKeyListener(new KeyBoard());
-        addMouseListener(mouse);
-        addMouseMotionListener(mouse);
+        random = new Random();
         this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         initFrame();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<>();
+        enemies = new ArrayList<>();
         spritesheet = new Spritesheet("/spritesheet.png");
 
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+        Mouse mouse = new Mouse();
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
+        addKeyListener(new KeyBoard());
         entities.add(player);
         world = new World("/map.png");
     }
@@ -86,8 +87,7 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
     }
 
     public void tick() {
-        for (int i = 0; i < entities.size(); i++) {
-            Entity e = entities.get(i);
+        for (Entity e : entities) {
             e.tick();
         }
     }
@@ -104,8 +104,7 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
         /*render jogo*/
         world.render(g);
 
-        for (int i = 0; i < entities.size(); i++) {
-            Entity e = entities.get(i);
+        for (Entity e : entities) {
             e.render(g);
         }
 
@@ -122,6 +121,7 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
+        requestFocus();
         while (isRunning) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
@@ -134,81 +134,4 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
         }
         stop();
     }
-
-    /*@Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-            player.up = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-            player.down = true;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-            player.left = true;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-            player.right = true;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-            Game.player.speed += 1;
-        }
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-            player.up = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-            player.down = false;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-            player.left = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-            player.right = false;
-        }
-
-
-        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-            Game.player.speed = player.SPEED_BASE;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_P) {
-            Game.player.isAttacking = true;
-        }
-
-
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        System.out.println("x"+e.getX());
-        System.out.println("lOnScr"+e.getY());
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }*/
 }

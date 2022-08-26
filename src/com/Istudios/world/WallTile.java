@@ -1,7 +1,5 @@
 package com.Istudios.world;
 
-import com.Istudios.world.Tile;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

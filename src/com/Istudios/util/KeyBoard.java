@@ -4,7 +4,6 @@ import com.Istudios.main.Game;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class KeyBoard extends KeyAdapter {
     @Override
@@ -27,7 +26,19 @@ public class KeyBoard extends KeyAdapter {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_P) {
-            Game.player.isAttacking = true;
+            Game.player.sword.isAttacking = true;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_I) {
+            Camera.y-=10;
+        } else if (e.getKeyCode() == KeyEvent.VK_K) {
+            Camera.y+=10;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_J) {
+            Camera.x-=10;
+        } else if (e.getKeyCode() == KeyEvent.VK_L) {
+            Camera.x+=10;
         }
 
     }

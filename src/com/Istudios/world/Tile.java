@@ -16,7 +16,7 @@ public class Tile {
     public static BufferedImage CORNER_TILE2 = Game.spritesheet.getSprite(0, 32, 16, 16);
     public static BufferedImage CORNER_TILE3 = Game.spritesheet.getSprite(16, 32, 16, 16);
     public static BufferedImage CORNER_TILE4 = Game.spritesheet.getSprite(0, 48, 16, 16);
-    public static BufferedImage MIDDLE_TILE = Game.spritesheet.getSprite(1*16, 3*16, 16, 16);
+    public static BufferedImage MIDDLE_TILE = Game.spritesheet.getSprite(16, 3*16, 16, 16);
     public static BufferedImage THREE_WAY_TILE = Game.spritesheet.getSprite(0, 7*16, 16, 16);
     public static BufferedImage THREE_WAY_TILE2 = Game.spritesheet.getSprite(16, 7*16, 16, 16);
     public static BufferedImage THREE_WAY_TILE3 = Game.spritesheet.getSprite(0, 8*16, 16, 16);
@@ -28,8 +28,9 @@ public class Tile {
     public static BufferedImage BREAKABLE_WALL_TILE = Game.spritesheet.getSprite(0, 4*16, 16, 16);
     public static BufferedImage BREAKABLE_WALL_TILE2 = Game.spritesheet.getSprite(16, 4*16, 16, 16);
 
-    private BufferedImage sprite;
-    private int x, y;
+    private final BufferedImage sprite;
+    private final int x;
+    private final int y;
 
     public void render(Graphics g) {
         g.drawImage(sprite, x - Camera.x, y - Camera.y, null);
