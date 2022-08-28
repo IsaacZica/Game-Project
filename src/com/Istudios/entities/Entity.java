@@ -74,4 +74,6 @@ public class Entity {
     public void render(Graphics g) {
         drawSprite(sprite,getX(),getY(),g);
     }
+
+
 }

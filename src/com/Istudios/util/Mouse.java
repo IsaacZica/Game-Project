@@ -106,4 +106,21 @@ public class Mouse extends MouseAdapter implements MouseMotionListener {
         e.consume();
     }
 
+    public static double getAngle(double x, double y) {
+        double angle = Math.toDegrees(Math.atan2(getMouseY() - y, getMouseX() - x));
+
+        if(angle < 0){
+            angle += 360;
+        }
+
+        return angle;
+    }
+
+    public static int getMouseX() {
+        return (int) (Mouse.getX() + Game.player.getCenterX() - Game.player.getXOnScreen());
+    }
+    public static int getMouseY() {
+        return (int) (Mouse.getY() + Game.player.getCenterY() - Game.player.getYOnScreen());
+    }
+
 }

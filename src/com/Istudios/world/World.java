@@ -56,7 +56,7 @@ public class World {
 
                         //inimigo simples
 
-                        Enemy enemy = new FleshEnemy(posX, posY, tileWSize, tileHSize, Entity.SIMPLEENEMY_EN);
+                        Enemy enemy = new FleshEnemy(posX, posY, tileWSize, tileHSize, Entity.SIMPLEENEMY_EN,0.2,15,5,5);
                         Game.entities.add(enemy);
                         Game.enemies.add(enemy);
 

@@ -2,13 +2,12 @@ package com.Istudios.entities;
 
 import com.Istudios.main.Game;
 import com.Istudios.util.Camera;
-import com.Istudios.util.Mouse;
 import com.Istudios.world.World;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+
+import static com.Istudios.util.Utils.setSpriteSheet;
 
 public class Player extends Entity {
 
@@ -52,48 +51,6 @@ public class Player extends Entity {
         setSpriteSheet(leftPlayer, 2, 3, 16);
 
 
-    }
-
-    public static BufferedImage rotateImageByDegrees(BufferedImage img, double angle) {
-        double rads = Math.toRadians(angle);
-        double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
-        int w = img.getWidth();
-        int h = img.getHeight();
-        int newWidth = (int) Math.floor(w * cos + h * sin);
-        int newHeight = (int) Math.floor(h * cos + w * sin);
-
-//        System.out.println(newWidth + " | " + newHeight);
-
-        BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = rotated.createGraphics();
-        AffineTransform at = new AffineTransform();
-        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
-
-        int x = w / 2;
-        int y = h / 2;
-//        System.out.println(x + " | " + y);
-        at.rotate(rads, x, y);
-        g2d.setTransform(at);
-        g2d.drawImage(img, 0, 0, null);
-        g2d.dispose();
-
-        return rotated;
-    }
-
-    public double getAngle(double x, double y) {
-        double angle = Math.toDegrees(Math.atan2(getMouseY() - y, getMouseX() - x));
-
-        if(angle < 0){
-            angle += 360;
-        }
-
-        return angle;
-    }
-
-    public static void setSpriteSheet(BufferedImage[] imgArray, int posX, int posY, int blockSize) {
-        for (int i = 0; i < imgArray.length; i++) {
-            imgArray[i] = Game.spritesheet.getSpriteByBlock(posX + i, posY, blockSize);
-        }
     }
 
     @Override
@@ -161,14 +118,7 @@ public class Player extends Entity {
 
     }
 
-    public int getMouseX() {
-//        Mouse.x -= Game.player.getXOnScreen();
-        return (int) (Mouse.getX() + getCenterX() - getXOnScreen() );
-    }
-    public int getMouseY() {
-//        Mouse.y -= Game.player.getYOnScreen();
-        return (int) (Mouse.getY() + getCenterY() - getYOnScreen());
-    }
+
 
     public int getXOnScreen() {
         return (int) (getCenterX()-Camera.x) - (Game.WIDTH/2);
