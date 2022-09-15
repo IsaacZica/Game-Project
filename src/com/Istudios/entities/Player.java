@@ -2,23 +2,24 @@ package com.Istudios.entities;
 
 import com.Istudios.main.Game;
 import com.Istudios.util.Camera;
+import com.Istudios.util.Mouse;
 import com.Istudios.world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ConcurrentModificationException;
 
 import static com.Istudios.util.Utils.setSpriteSheet;
 
 public class Player extends Entity {
 
     public boolean right, left, up, down;
-    public double SPEED_BASE = 0.85;
-    public double speed = SPEED_BASE;
 
     public int right_dir = 0, left_dir = 1, up_dir = 2, down_dir = 3;
     public int dir = right_dir;
 
-    private boolean isMoving = false;
+    private boolean isMoving;
+    public boolean isAttacking;
 
     public static Point point;
 
@@ -31,7 +32,12 @@ public class Player extends Entity {
     private final  BufferedImage[] leftPlayer;
     private final BufferedImage[] upPlayer;
     private final  BufferedImage[] downPlayer;
+
     public Sword sword;
+    public double health = 50;
+    public double maxHealth = 50;
+    public double SPEED_BASE = 0.85;
+    public double speed = SPEED_BASE;
 
 
 
@@ -49,13 +55,15 @@ public class Player extends Entity {
         setSpriteSheet(upPlayer, 2, 1, 16);
         setSpriteSheet(rightPlayer, 2, 2, 16);
         setSpriteSheet(leftPlayer, 2, 3, 16);
-
-
     }
 
     @Override
     public void tick() {
+
+
+
         isMoving = false;
+//        isAttacking = false;
 
         if (up && World.isFree(this.getX(), (int) (y-speed))) {
             dir = up_dir;
@@ -87,9 +95,12 @@ public class Player extends Entity {
             }
         }
 
-        if (sword.isAttacking) {
+        if (isAttacking) {
             sword.attackTick();
         }
+
+        this.checkCollisionWithHealthRestore();
+
 //        System.out.println("GetXOnScreen "+getXOnScreen());
 //        System.out.println("GetYOnScreen "+getYOnScreen());
 
@@ -111,14 +122,30 @@ public class Player extends Entity {
             drawSprite(downPlayer[index], getX(), getY(), g);
         }
 
-        if (Sword.isAttacking) {
+        if (isAttacking) {
             sword.attackRender(g);
         }
 
-
     }
 
+    public void checkCollisionWithHealthRestore() {
+        for (int i = 0; i < Game.entities.size(); i++) {
 
+            Entity e = Game.entities.get(i);
+
+            if (e instanceof HealthRestore) {
+                if (Entity.isColliding(this, e)) {
+                    health += 8;
+                    if (health > maxHealth) {
+                        health = maxHealth;
+                    }
+//
+//
+                    if (e.equals(Game.entities.get(i))) Game.entities.remove(e);
+                }
+            }
+        }
+    }
 
     public int getXOnScreen() {
         return (int) (getCenterX()-Camera.x) - (Game.WIDTH/2);

@@ -19,6 +19,13 @@ public class Enemy extends Entity{
         this.damage = damage;
     }
 
+    public boolean isCollidingWithPlayer() {
+        Rectangle currentEnemy = new Rectangle(this.getX(),this.getY(),width,height);
+        Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), Game.player.width, Game.player.height);
+
+        return currentEnemy.intersects(player);
+    }
+
     public boolean isColliding(int nextX, int nextY) {
         Rectangle currentEnemy = new Rectangle(nextX,nextY,width,height);
         for (Enemy en : Game.enemies) {

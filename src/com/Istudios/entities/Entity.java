@@ -13,6 +13,11 @@ public class Entity {
     public static BufferedImage SIMPLEENEMY_EN = Game.spritesheet.getSprite(7*16, 16, 16, 16);
     public static BufferedImage WAND_EN = Game.spritesheet.getSprite(7*16, 0, 16, 16);
 
+    public int maskY;
+    public int maskX;
+    public int maskWidth;
+    public int maskHeight;
+
 
     protected double x;
     protected double y;
@@ -28,6 +33,19 @@ public class Entity {
         this.width = width;
         this.height = height;
         this.sprite = sprite;
+
+        this.maskX = 0;
+        this.maskY = 0;
+        this.maskWidth = width;
+        this.maskHeight = height;
+
+    }
+
+    public void setMask(int maskX, int maskY, int maskWidth, int maskHeight) {
+        this.maskX = maskX;
+        this.maskY = maskY;
+        this.maskWidth = maskWidth;
+        this.maskHeight = maskHeight;
     }
 
     public int getX() {
@@ -75,5 +93,42 @@ public class Entity {
         drawSprite(sprite,getX(),getY(),g);
     }
 
+    public static boolean isColliding(Entity e1, Entity e2) {
+        Rectangle e1Mask = new Rectangle(e1.getX() + e1.getMaskX(), e1.getY() + e1.getMaskY(), e1.maskWidth, e1.maskHeight);
+        Rectangle e2Mask = new Rectangle(e2.getX() + e2.getMaskX(), e2.getY() + e2.getMaskY(), e2.maskWidth, e2.maskHeight);
 
+        return e1Mask.intersects(e2Mask);
+    }
+
+    public int getMaskY() {
+        return maskY;
+    }
+
+    public void setMaskY(int maskY) {
+        this.maskY = maskY;
+    }
+
+    public int getMaskX() {
+        return maskX;
+    }
+
+    public void setMaskX(int maskX) {
+        this.maskX = maskX;
+    }
+
+    public int getMaskWidth() {
+        return maskWidth;
+    }
+
+    public void setMaskWidth(int maskWidth) {
+        this.maskWidth = maskWidth;
+    }
+
+    public int getMaskHeight() {
+        return maskHeight;
+    }
+
+    public void setMaskHeight(int maskHeight) {
+        this.maskHeight = maskHeight;
+    }
 }

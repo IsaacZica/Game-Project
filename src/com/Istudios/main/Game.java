@@ -5,6 +5,7 @@ import com.Istudios.entities.Entity;
 import com.Istudios.entities.Player;
 import com.Istudios.entities.Sword;
 import com.Istudios.grafics.Spritesheet;
+import com.Istudios.grafics.UI;
 import com.Istudios.util.KeyBoard;
 import com.Istudios.util.Mouse;
 import com.Istudios.world.World;
@@ -19,7 +20,7 @@ import java.util.Random;
 
 public class Game extends Canvas implements Runnable/*, KeyListener, MouseListener*/ {
 
-//    public static AffineTransformOp at = new AffineTransformOp();
+    //    public static AffineTransformOp at = new AffineTransformOp();
     public boolean isRunning;
     private Thread thread;
     public static JFrame frame;
@@ -36,9 +37,13 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
     public static World world;
     public static Random random;
 
+    public UI ui;
+
+
 
     public Game() {
         random = new Random();
+        ui = new UI();
         this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         initFrame();
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -87,8 +92,12 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
     }
 
     public void tick() {
-        for (Entity e : entities) {
-            e.tick();
+//        for (Entity e : entities) {
+//            e.tick();
+//        }
+
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Game.entities.get(i).tick();
         }
     }
 
@@ -108,10 +117,12 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
             e.render(g);
         }
 
+        ui.render(g);
+
         /**/
         g.dispose();
         g = bs.getDrawGraphics();
-        g.drawImage(image, 0, 0,WIDTH*SCALE,HEIGHT*SCALE,null);
+        g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
         bs.show();
     }
 

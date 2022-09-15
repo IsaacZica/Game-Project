@@ -6,7 +6,6 @@ import com.Istudios.util.Mouse;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import static com.Istudios.util.Mouse.getMouseX;
@@ -22,10 +21,13 @@ public class Sword {
     public static int atcIndex = 0;
     public static final int atcMaxIndex = 3;
 
-    public static boolean isAttacking;
     public static boolean isContinuosAttack;
 
     private int damage = 1;
+    private int attackCount = 1;
+    private int attackSequence = 3;
+    private int cooldownCount = 0;
+    private int cooldownMax = 2;
     private final int knockback = 5;
     private final int range = 20;
 
@@ -48,19 +50,38 @@ public class Sword {
 
     public void attackTick() {
 
-        atcFrames++;
-        if (atcFrames == atcMaxFrames) {
-            atcFrames = 0;
-            atcIndex++;
-        }
-        if (atcIndex > atcMaxIndex) {
-            atcIndex = 0;
-            hit();
-            if (!isContinuosAttack) {
-                isAttacking = false;
-            }
-        }
 
+//        if (attackCount <= attackSequence) {
+            atcFrames++;
+            if (atcFrames == atcMaxFrames) {
+                atcFrames = 0;
+                atcIndex++;
+            }
+
+            if (atcIndex > atcMaxIndex) {
+                atcIndex = 0;
+                hit();
+//                if (isContinuosAttack) attackCount++;
+                if (!isContinuosAttack) {
+                    player.isAttacking = false;
+                }
+            }
+
+            updateValues();
+       /* } else {
+            isAttacking = false;
+            cooldownCount++;
+            System.out.println(cooldownCount);
+            if (cooldownCount == cooldownMax) {
+                cooldownCount = 0;
+                attackCount = 1;
+                isAttacking = true;
+            }
+        }*/
+
+    }
+
+    public void updateValues() {
         angle = Mouse.getAngle(player.getCenterX(), player.getCenterY());
         img = rotateImageByDegrees(attack[atcIndex], angle);
         px = getXByAngle(angle, range) - img.getWidth() / 2;
@@ -71,29 +92,20 @@ public class Sword {
 
         g.setColor(Color.RED);
         g.drawLine((int) player.getCenterX() - Camera.x, (int) player.getCenterY() - Camera.y, getMouseX() - Camera.x, getMouseY() - Camera.y);
-//        g.drawLine((int) player.getCenterX() - Camera.x, (int) player.getCenterY() - Camera.y, (int) (player.getCenterX() + px - Camera.x), (int) (player.getCenterY() + py - Camera.y));
 
         Game.player.drawSprite(img, (int) (player.getCenterX() + px), (int) (player.getCenterY() + py), g);
 
-        if (Mouse.mouseDragged || isContinuosAttack) {
-            g.setColor(Color.RED);
-            g.drawOval(getMouseX() - Camera.x - 5, getMouseY() - Camera.y - 5, 10, 10);
-        }
+        g.setColor(Color.RED);
+        g.drawOval(getMouseX() - Camera.x - 5, getMouseY() - Camera.y - 5, 10, 10);
 
-        if (isAttacking) {
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setColor(Color.CYAN);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.CYAN);
 
-            Ellipse2D ellipse1 = createEllipseHitbox(20, 25, angle, true);
-            Ellipse2D ellipse2 = createEllipseHitbox(25, 15, angle, true);
-            g2d.draw(ellipse1);
-            g2d.draw(ellipse2);
-//            swordHitbox.y -= Camera.y;
-//            swordHitbox.x -= Camera.x;
-//            g2d.draw(swordHitbox);
-            g2d.dispose();
-        }
-
+        Ellipse2D ellipse1 = createEllipseHitbox(20, 25, angle, true);
+        Ellipse2D ellipse2 = createEllipseHitbox(25, 15, angle, true);
+        g2d.draw(ellipse1);
+        g2d.draw(ellipse2);
+        g2d.dispose();
     }
 
 
@@ -117,8 +129,8 @@ public class Sword {
                 System.out.println("acerto");
                 e.takeDamage(damage);
 
-//                System.out.println("inimigo: "+Game.enemies.indexOf(e));
-//                System.out.println("vida: "+e.health);
+                System.out.println("inimigo: "+Game.enemies.indexOf(e));
+                System.out.println("vida: "+e.health);
             }
         }
     }

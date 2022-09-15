@@ -30,28 +30,39 @@ public class FleshEnemy extends Enemy {
     public void tick() {
         isMoving = false;
 
-        if (getCenterX() < Game.player.getCenterX() &&
-                World.isFree((int) (x+speed),(int) y) &&
-                !isColliding((int) (x+speed),(int) y)) {
-            isMoving = true;
-            x += speed;
-        } else if (getCenterX() > Game.player.getCenterX() &&
-                World.isFree((int) (x-speed),(int) y) &&
-                !isColliding((int) (x-speed),(int) y)) {
-            isMoving = true;
-            x -= speed;
-        }
+        if (!isCollidingWithPlayer()) {
 
-        if (getCenterY() < Game.player.getCenterY() &&
-                World.isFree((int) x,(int) (y+speed)) &&
-                !isColliding((int) x,(int) (y+speed))) {
-            isMoving = true;
-            y += speed;
-        } else if (getCenterY() > Game.player.getCenterY() &&
-                World.isFree((int) x,(int) (y-speed)) &&
-                !isColliding((int) x,(int) (y-speed))) {
-            isMoving = true;
-            y -= speed;
+            if (getCenterX() < Game.player.getCenterX() &&
+                    World.isFree((int) (x+speed),(int) y) &&
+                    !isColliding((int) (x+speed),(int) y)) {
+                isMoving = true;
+                x += speed;
+            } else if (getCenterX() > Game.player.getCenterX() &&
+                    World.isFree((int) (x-speed),(int) y) &&
+                    !isColliding((int) (x-speed),(int) y)) {
+                isMoving = true;
+                x -= speed;
+            }
+
+            if (getCenterY() < Game.player.getCenterY() &&
+                    World.isFree((int) x,(int) (y+speed)) &&
+                    !isColliding((int) x,(int) (y+speed))) {
+                isMoving = true;
+                y += speed;
+            } else if (getCenterY() > Game.player.getCenterY() &&
+                    World.isFree((int) x,(int) (y-speed)) &&
+                    !isColliding((int) x,(int) (y-speed))) {
+                isMoving = true;
+                y -= speed;
+            }
+
+        } else {
+
+            if (Game.random.nextInt(100) < 10) {
+                Game.player.health--;
+                System.out.println("vida: "+Game.player.health);
+            }
+
         }
 
         if (isMoving) {
@@ -59,13 +70,11 @@ public class FleshEnemy extends Enemy {
             if (frames >= maxFrames) {
                 frames = 0;
                 index++;
-                if (index > maxIndex)
+                if (index > maxIndex) {
                     index = 0;
+                }
             }
         }
-
-
-
     }
 
     @Override

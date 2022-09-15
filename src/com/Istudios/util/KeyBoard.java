@@ -26,7 +26,7 @@ public class KeyBoard extends KeyAdapter {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_P) {
-            Game.player.sword.isAttacking = true;
+            Game.player.isAttacking = true;
         }
 
         if (e.getKeyCode() == KeyEvent.VK_I) {
