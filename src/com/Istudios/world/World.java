@@ -18,10 +18,13 @@ public class World {
     private int[] pixels;
     private int px, py;
     public static final int TILE_SIZE = 16;
+    public int playerXSpawn;
+    public int playerYSpawn;
 
     public World(String path) {
         try {
             BufferedImage map = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
+//            BufferedImage map = getClass().getResource(path);
             tiles = new Tile[map.getWidth() * map.getHeight()];
             pixels = new int[map.getWidth() * map.getHeight()];
             WIDTH = map.getWidth();
@@ -65,6 +68,8 @@ public class World {
                         //jogador
                         Game.player.setX(posX);
                         Game.player.setY(posY);
+                        playerXSpawn = posX;
+                        playerYSpawn = posY;
 
                     } else if (pixel == 0xFFFF7F7F) {
 
@@ -74,7 +79,7 @@ public class World {
                     } else if (pixel == 0xFFFF006E) {
 
                         //varinha magica
-                        Game.entities.add(new Wand(posX, posY, tileWSize, tileHSize, Entity.WAND_EN));
+                        Game.entities.add(new DroppedWand(posX, posY, tileWSize, tileHSize, Entity.WAND_EN));
 
                     } else if (pixel == 0xFFFFD800) {
 
@@ -132,7 +137,7 @@ public class World {
     private int getColor(int x, int y) {
         int sx = px + x;
         int sy = py + y;
-        if (sx > 0 && sx < WIDTH - 1 && sy > 0 && sy < HEIGHT - 1) {
+        if (sx >= 0 && sx < WIDTH  && sy >= 0 && sy < HEIGHT ) {
 //            System.out.println("px: " + px  + " | py: " + py);
             return pixels[(px + x) + (py + y) * WIDTH];
         }

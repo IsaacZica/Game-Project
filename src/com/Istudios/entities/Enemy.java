@@ -20,7 +20,7 @@ public class Enemy extends Entity{
     }
 
     public boolean isCollidingWithPlayer() {
-        Rectangle currentEnemy = new Rectangle(this.getX(),this.getY(),width,height);
+        Rectangle currentEnemy = new Rectangle(this.getX() + maskX,this.getY() + maskY,maskWidth,maskHeight);
         Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), Game.player.width, Game.player.height);
 
         return currentEnemy.intersects(player);

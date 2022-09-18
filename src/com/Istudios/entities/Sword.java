@@ -126,11 +126,7 @@ public class Sword {
         for (Enemy e : Game.enemies) {
             Rectangle targetEnemy = new Rectangle(e.getX(), e.getY(), e.width, e.height);
             if (hitEllipse1.intersects(targetEnemy) || hitEllipse2.intersects(targetEnemy)) {
-                System.out.println("acerto");
                 e.takeDamage(damage);
-
-                System.out.println("inimigo: "+Game.enemies.indexOf(e));
-                System.out.println("vida: "+e.health);
             }
         }
     }

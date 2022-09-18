@@ -1,6 +1,6 @@
 package com.Istudios.util;
 
-import com.Istudios.entities.Sword;
+import com.Istudios.entities.DroppedWand;
 import com.Istudios.main.Game;
 
 import java.awt.event.MouseAdapter;
@@ -61,6 +61,12 @@ public class Mouse extends MouseAdapter implements MouseMotionListener {
             isClicking = true;
             Game.player.isAttacking = true;
             Game.player.sword.isContinuosAttack = true;
+        }
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            isClicking = true;
+            Game.player.wand.isCasting = true;
+            Game.player.wand.mx = (int) x;
+            Game.player.wand.my = (int) y;
         }
     }
 

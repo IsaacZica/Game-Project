@@ -60,7 +60,6 @@ public class FleshEnemy extends Enemy {
 
             if (Game.random.nextInt(100) < 10) {
                 Game.player.health--;
-                System.out.println("vida: "+Game.player.health);
             }
 
         }

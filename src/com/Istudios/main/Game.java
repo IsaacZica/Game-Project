@@ -1,9 +1,6 @@
 package com.Istudios.main;
 
-import com.Istudios.entities.Enemy;
-import com.Istudios.entities.Entity;
-import com.Istudios.entities.Player;
-import com.Istudios.entities.Sword;
+import com.Istudios.entities.*;
 import com.Istudios.grafics.Spritesheet;
 import com.Istudios.grafics.UI;
 import com.Istudios.util.KeyBoard;
@@ -30,6 +27,7 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
 
     private final BufferedImage image;
 
+    public static List<Projectile> projectiles;
     public static List<Entity> entities;
     public static List<Enemy> enemies;
     public static Spritesheet spritesheet;
@@ -49,6 +47,7 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<>();
         enemies = new ArrayList<>();
+        projectiles = new ArrayList<>();
         spritesheet = new Spritesheet("/spritesheet.png");
 
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
@@ -92,12 +91,13 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
     }
 
     public void tick() {
-//        for (Entity e : entities) {
-//            e.tick();
-//        }
+
 
         for (int i = 0; i < Game.entities.size(); i++) {
             Game.entities.get(i).tick();
+        }
+        for (int i = 0; i < Game.projectiles.size(); i++) {
+            Game.projectiles.get(i).tick();
         }
     }
 
@@ -115,6 +115,10 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
 
         for (Entity e : entities) {
             e.render(g);
+        }
+
+        for (Projectile p : projectiles) {
+            p.render(g);
         }
 
         ui.render(g);

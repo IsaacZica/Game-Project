@@ -1,14 +1,16 @@
 package com.Istudios.entities;
 
+import com.Istudios.grafics.Spritesheet;
 import com.Istudios.main.Game;
 import com.Istudios.util.Camera;
-import com.Istudios.util.Mouse;
 import com.Istudios.world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ConcurrentModificationException;
+import java.util.ArrayList;
 
+import static com.Istudios.main.Game.spritesheet;
+import static com.Istudios.main.Game.world;
 import static com.Istudios.util.Utils.setSpriteSheet;
 
 public class Player extends Entity {
@@ -34,12 +36,15 @@ public class Player extends Entity {
     private final  BufferedImage[] downPlayer;
 
     public Sword sword;
+    public boolean hasWand;
+    public Wand wand;
+
     public double health = 50;
     public double maxHealth = 50;
     public double SPEED_BASE = 0.85;
     public double speed = SPEED_BASE;
-
-
+    public double maxMana = 65;
+    public double mana = maxMana;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -50,6 +55,7 @@ public class Player extends Entity {
         point = new Point(x, y);
         sword = new Sword();
         sword.player = this;
+        wand = new Wand();
 
         setSpriteSheet(downPlayer, 2, 0, 16);
         setSpriteSheet(upPlayer, 2, 1, 16);
@@ -98,14 +104,28 @@ public class Player extends Entity {
         if (isAttacking) {
             sword.attackTick();
         }
+        wand.tick();
 
-        this.checkCollisionWithHealthRestore();
-
+        checkAll();
 //        System.out.println("GetXOnScreen "+getXOnScreen());
 //        System.out.println("GetYOnScreen "+getYOnScreen());
 
         Camera.x = Camera.clamp((int) (getCenterX() - (Game.WIDTH / 2) - 1), 0, World.WIDTH * 16 - Game.WIDTH);
         Camera.y = Camera.clamp((int) (getCenterY() - (Game.HEIGHT / 2) - 1), 0, World.HEIGHT * 16 - Game.HEIGHT);
+
+        if (health <= 0) {
+            Game.entities = new ArrayList<>();
+            Game.enemies = new ArrayList<>();
+            Game.world = new World("/map.png");
+            spritesheet = new Spritesheet("/spritesheet.png");
+            Game.player = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(32, 0, 16, 16));
+            Game.player.x = world.playerXSpawn;
+            Game.player.y = world.playerYSpawn;
+            Game.entities.add(Game.player);
+            return;
+
+        }
+
 
     }
 
@@ -128,25 +148,42 @@ public class Player extends Entity {
 
     }
 
-    public void checkCollisionWithHealthRestore() {
-        for (int i = 0; i < Game.entities.size(); i++) {
 
+
+    private void checkAll() {
+        for (int i = 0; i < Game.entities.size(); i++) {
             Entity e = Game.entities.get(i);
 
-            if (e instanceof HealthRestore) {
+            if (e instanceof ManaRestore) {
                 if (Entity.isColliding(this, e)) {
-                    health += 8;
-                    if (health > maxHealth) {
-                        health = maxHealth;
+                    if (e.equals(Game.entities.get(i))) {
+                        mana += 15;
+                        if (mana > maxMana) {
+                            mana = maxMana;
+                        }
+                        Game.entities.remove(e);
                     }
-//
-//
-                    if (e.equals(Game.entities.get(i))) Game.entities.remove(e);
+                }
+            } else if (e instanceof DroppedWand) {
+                if (Entity.isColliding(this, e)) {
+                    if (e.equals(Game.entities.get(i))) {
+                        hasWand = true;
+                        Game.entities.remove(e);
+                    }
+                }
+            } else if (e instanceof HealthRestore) {
+                if (Entity.isColliding(this, e)) {
+                    if (e.equals(Game.entities.get(i))) {
+                        health += 8;
+                        if (health > maxHealth) {
+                            health = maxHealth;
+                        }
+                        Game.entities.remove(e);
+                    }
                 }
             }
         }
     }
-
     public int getXOnScreen() {
         return (int) (getCenterX()-Camera.x) - (Game.WIDTH/2);
     }
