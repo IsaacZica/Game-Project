@@ -26,6 +26,7 @@ public class Wand {
             int py = 8;
 
             Game.projectiles.add(new Projectile((int) Game.player.getCenterX(), (int) Game.player.getCenterY(), 4, 4, Color.CYAN, dx, dy));
+            Game.entities.add(new Projectile((int) Game.player.getCenterX(), (int) Game.player.getCenterY(), 4, 4, Color.CYAN, dx, dy));
             Game.player.mana -= 5;
             frames = 0;
         }

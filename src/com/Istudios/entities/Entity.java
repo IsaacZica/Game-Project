@@ -2,9 +2,13 @@ package com.Istudios.entities;
 
 import com.Istudios.main.Game;
 import com.Istudios.util.Camera;
+import com.Istudios.world.Node;
+import com.Istudios.world.Vector2i;
+import com.Istudios.world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class Entity {
 
@@ -12,6 +16,8 @@ public class Entity {
     public static BufferedImage MANARESTORE_EN = Game.spritesheet.getSprite(6*16, 16, 16, 16);
     public static BufferedImage SIMPLEENEMY_EN = Game.spritesheet.getSprite(7*16, 16, 16, 16);
     public static BufferedImage WAND_EN = Game.spritesheet.getSprite(7*16, 0, 16, 16);
+
+    protected List<Node> path;
 
     public int maskY;
     public int maskX;
@@ -46,6 +52,33 @@ public class Entity {
         this.maskY = maskY;
         this.maskWidth = maskWidth;
         this.maskHeight = maskHeight;
+    }
+
+    public void followPath(List<Node> path) {
+        if (path != null) {
+            if (path.size() > 0) {
+                Vector2i target = path.get(path.size() - 1).tile;
+//                xprev = x;
+//                yprev = y;
+                if (x < target.x * World.TILE_SIZE) {
+                    x++;
+                } else if (x > target.x * World.TILE_SIZE) {
+                    x--;
+                }
+
+                if (y < target.y * World.TILE_SIZE) {
+                    y++;
+                } else if (y > target.y * World.TILE_SIZE) {
+                    y--;
+                }
+
+                if (x == target.x && y == target.y) {
+                    path.remove(path.size() - 1);
+                }
+
+
+            }
+        }
     }
 
     public int getX() {

@@ -38,6 +38,11 @@ public class Enemy extends Entity{
         return false;
     }
 
+    public void die() {
+        Game.entities.remove(this);
+        return;
+    }
+
     private void damage() {
 
     }

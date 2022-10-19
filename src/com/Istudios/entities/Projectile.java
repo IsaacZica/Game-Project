@@ -6,7 +6,7 @@ import com.Istudios.world.World;
 
 import java.awt.*;
 
-public class Projectile extends Rectangle {
+public class Projectile extends Entity {
     private Color color;
     private double x;
     private double y;
@@ -16,9 +16,10 @@ public class Projectile extends Rectangle {
     private int maxBounce = 3;
     private int width;
     private int height;
+    public int damage = 5;
 
     public Projectile(int x, int y, int width, int height, Color color, double xSpeed, double ySpeed) {
-        super(x, y, width, height);
+        super(x, y,width,height, null);
         this.color = color;
         this.x = x;
         this.y = y;
@@ -30,38 +31,27 @@ public class Projectile extends Rectangle {
     }
 
     public void tick() {
-        if (!World.isFree((int) (x + xSpeed), (int) y)) {
+
+        if (World.thisTile(x + width,y)) {
             xSpeed *= -1;
             bounceCount++;
-        } else if (!World.isFree((int) (x - xSpeed), (int) y)) {
+        } else if (World.thisTile(x-1,y)) {
             xSpeed *= -1;
             bounceCount++;
         }
 
-        if (!World.isFree((int) x, (int) (y + ySpeed))) {
+        if (World.thisTile(x,y + height)) {
             ySpeed *= -1;
             bounceCount++;
-        } else if (!World.isFree((int) x, (int) (y - ySpeed))) {
-            ySpeed *= -1;
+        } else if (World.thisTile(x,y-1)) {
+            ySpeed *=-1;
             bounceCount++;
         }
 
-//        if (!World.isFree((int) (x), (int) y)) {
-//            xSpeed *= -1;
-//            bounceCount++;
-//        } if (!World.isFree((int) (x), (int) y)) {
-//            xSpeed *= -1;
-//            bounceCount++;
-//        } if (!World.isFree((int) x, (int) (y))) {
-//            ySpeed *= -1;
-//            bounceCount++;
-//        } if (!World.isFree((int) x, (int) (y))) {
-//            ySpeed *= -1;
-//            bounceCount++;
-//        }
+
 
         if (bounceCount >= maxBounce) {
-            Game.projectiles.remove(this);
+            Game.entities.remove(this);
         }
 
         x += xSpeed;
@@ -71,7 +61,7 @@ public class Projectile extends Rectangle {
 
     public void render(Graphics g) {
         g.setColor(color);
-        g.fillRect((int) (x - Camera.x),(int) (y + - Camera.y),this.width,this.height) ;
+        g.fillRect((int) (x - Camera.x),(int) (y + - Camera.y),this.width,this.height); ;
     }
 
     public Color getColor() {
@@ -83,8 +73,8 @@ public class Projectile extends Rectangle {
     }
 
     @Override
-    public double getX() {
-        return x;
+    public int getX() {
+        return (int) x;
     }
 
     public void setX(double x) {
@@ -92,8 +82,8 @@ public class Projectile extends Rectangle {
     }
 
     @Override
-    public double getY() {
-        return y;
+    public int getY() {
+        return (int) y;
     }
 
     public void setY(double y) {

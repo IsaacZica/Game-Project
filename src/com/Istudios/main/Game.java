@@ -96,9 +96,6 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
         for (int i = 0; i < Game.entities.size(); i++) {
             Game.entities.get(i).tick();
         }
-        for (int i = 0; i < Game.projectiles.size(); i++) {
-            Game.projectiles.get(i).tick();
-        }
     }
 
     public void render() {
@@ -115,10 +112,6 @@ public class Game extends Canvas implements Runnable/*, KeyListener, MouseListen
 
         for (Entity e : entities) {
             e.render(g);
-        }
-
-        for (Projectile p : projectiles) {
-            p.render(g);
         }
 
         ui.render(g);

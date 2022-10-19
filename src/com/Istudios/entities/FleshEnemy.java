@@ -29,6 +29,13 @@ public class FleshEnemy extends Enemy {
 
     public void tick() {
         isMoving = false;
+        collidingBullet();
+
+        if (health <= 0) {
+            die();
+            return;
+        }
+
 
         if (!isCollidingWithPlayer()) {
 
@@ -79,5 +86,17 @@ public class FleshEnemy extends Enemy {
     @Override
     public void render(Graphics g) {
         g.drawImage(movingAnimation[index],getX()- Camera.x,getY()- Camera.y,width,height,null );
+    }
+
+    public void collidingBullet() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity e = Game.entities.get(i);
+            if (e instanceof Projectile) {
+                if (Entity.isColliding(this, e)) {
+                    this.health -= ((Projectile) e).damage;
+                    Game.entities.remove(e);
+                }
+            }
+        }
     }
 }

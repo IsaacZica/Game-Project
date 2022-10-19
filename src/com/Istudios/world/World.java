@@ -115,18 +115,19 @@ public class World {
         }
     }
 
-    public static boolean isFree(int nextX, int nextY) {
+    public static boolean isFree(int nextX, int nextY/*, int size*/) {
+
         int x1 = nextX / TILE_SIZE;
         int y1 = nextY / TILE_SIZE;
 
-        int x2 = (nextX + TILE_SIZE-1) / TILE_SIZE;
+        int x2 = (nextX + TILE_SIZE - 1) / TILE_SIZE;
         int y2 = nextY / TILE_SIZE;
 
         int x3 = nextX / TILE_SIZE;
-        int y3 = (nextY + TILE_SIZE-1) / TILE_SIZE;
+        int y3 = (nextY + TILE_SIZE - 1) / TILE_SIZE;
 
-        int x4 = (nextX + TILE_SIZE-1) / TILE_SIZE;
-        int y4 = (nextY + TILE_SIZE-1) / TILE_SIZE;
+        int x4 = (nextX + TILE_SIZE - 1) / TILE_SIZE;
+        int y4 = (nextY + TILE_SIZE - 1) / TILE_SIZE;
 
         return !(tiles[x1 + (y1 * World.WIDTH)] instanceof WallTile ||
                 tiles[x2 + (y2 * World.WIDTH)] instanceof WallTile ||
@@ -142,6 +143,13 @@ public class World {
             return pixels[(px + x) + (py + y) * WIDTH];
         }
         return 0;
+    }
+
+    public static boolean thisTile(double x, double y) {
+        int tx =(int) (x / TILE_SIZE);
+        int ty =(int) (y / TILE_SIZE);
+
+        return tiles[tx + ty * World.WIDTH] instanceof WallTile;
     }
 
     private BufferedImage tileOrientation(int s1, int s2, int s3, int s4) {
